@@ -20,17 +20,17 @@
 
     <dl>
       <dt>
-        Content
-      </dt>
-      <dd>
-        <%= @the_todo.content %>
-      </dd>
-
-      <dt>
         Status
       </dt>
       <dd>
         <%= @the_todo.status %>
+      </dd>
+
+      <dt>
+        Content
+      </dt>
+      <dd>
+        <%= @the_todo.content %>
       </dd>
 
       <dt>
@@ -68,19 +68,19 @@
 
     <form action="/modify_todo/<%= @the_todo.id %>"  method="post" >
       <div>
-        <label for="content_box">
-          Content
-        </label>
-
-        <input type="text" id="content_box" name="query_content" value="<%= @the_todo.content %>">
-      </div>
-
-      <div>
         <label for="status_box">
           Status
         </label>
 
         <input type="text" id="status_box" name="query_status" value="<%= @the_todo.status %>">
+      </div>
+
+      <div>
+        <label for="content_box">
+          Content
+        </label>
+
+        <input type="text" id="content_box" name="query_content" value="<%= @the_todo.content %>">
       </div>
 
       <div>

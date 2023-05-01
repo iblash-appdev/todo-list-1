@@ -1,118 +1,89 @@
+
+  <h1>
+    Your todo list
+  </h1>
 <div>
-  <div>
-    <h1>
-      List of all todos
-    </h1>
-  </div>
-</div>
+  <h2>
+    Add a new todo
+  </h2>
 
-<hr>
+  <form action="/insert_todo" method="post">
+    <div>
+      <label for="content_box">Describe the task:</label>
 
-<div>
-  <div>
-    <h2>
-      Add a new todo
-    </h2>
+      <input type="text" id="content_box" name="query_content">
 
-    <form action="/insert_todo" method="post">
-      <div>
-        <label for="content_box">
-          Content
-        </label>
+      <input type="hidden" id="user_box" name="query_user_id" value="<%= session[:user_id] %>"> 
 
-        <input type="text" id="content_box" name="query_content">
-      </div>
+      <input type="hidden" id="status_box" name="query_status" value="next_up">
+    </div>
 
-      <div>
-        <label for="status_box">
-          Status
-        </label>
-
-        <input type="text" id="status_box" name="query_status">
-      </div>
-
-      <div>
-        <label for="user_id_box">
-          User
-        </label>
-
-        <input type="text" id="user_id_box" name="query_user_id">
-      </div>
-
-      <button>
-        Create todo
-      </button>
-    </form>
-  </div>
-</div>
-
-<hr>
-<div>
-  <div>
-    <table border="1">
-      <tr>
-        <th>
-          ID
-        </th>
-
-        <th>
-          Content
-        </th>
-
-        <th>
-          Status
-        </th>
-
-        <th>
-          User
-        </th>
-
-        <th>
-          Created at
-        </th>
-
-        <th>
-          Updated at
-        </th>
-
-        <th>
-        </th>
-      </tr>
-
-      <% @list_of_todos.each do |a_todo| %>
-      <tr>
-        <td>
-          <%= a_todo.id %>
-        </td>
-
-        <td>
-          <%= a_todo.content %>
-        </td>
-
-        <td>
-          <%= a_todo.status %>
-        </td>
-
-        <td>
-          <%= a_todo.user_id %>
-        </td>
-
-        <td>
-          <%= time_ago_in_words(a_todo.created_at) %> ago
-        </td>
-        <td>
-          <%= time_ago_in_words(a_todo.updated_at) %> ago
-        </td>
-
-        <td>
-          <a href="/todos/<%= a_todo.id %>">
-            Show details
-          </a>
-        </td>
-      </tr>
+    <button>Add to Next Up</button>
+   
+  </form>
+  <div class="next_up" style="color:#FF8C00">
+    <h2>Next Up</h2>
+    <% @list_of_next_up.each do | a_todo|%>
+    <ul>
+      <li>
+      <% if a_todo.status == "next_up" %>
+        <div><%= a_todo.content%></div>
+        <small>
+          Added <%= time_ago_in_words(a_todo.updated_at) %> ago <a href="/delete_todo/<%= a_todo.id %>">Delete</a>
+        </small>
+        <form action="/modify_todo/<%= a_todo.id %>" method="post">
+          <input type="hidden" name="query_status" value="in_progress">
+          <button>Move to In Progress</button>
+        </form>
       <% end %>
-    </table>
+      </li>
+    </ul>
+    <% end %>
   </div>
+
+
+<%# Todo.all.order({ :created_at => :desc }).each do |a_todo|%>
+<%# @list_of_todos.each do |a_todo| %>
+<%# if a_todo.status == "next_up" %>
+<%#= a_todo.content %>
+  
+
+<div class="in_progress" style="color:#006400">
+  <h2>In Progress</h2>
+  <% @list_of_todos_progress.each do |a_todo | %>
+    <ul>
+      <li>
+      <% if a_todo.status == "in_progress" %>
+      <div><%= a_todo.content %></div>
+      <small>Started <%= time_ago_in_words(a_todo.updated_at) %> ago
+        <a href="/delete_todo/<%= a_todo.id %>">Delete</a></small>
+        <form action="/modify_todo/<%= a_todo.id %>" method="post">
+          <input type="hidden" name="query_status" value="done">
+          <button>Move to Done</button>
+        </form>
+      <%# @list_of_todos.each do |a_todo| %>
+      <%# if a_todo.status == "in_progress" %>
+      <%#= a_todo.content %>
+      </li>
+      <% end %>
+    </ul>
+  <% end %>     
 </div>
 
-<hr>
+
+<div class="done" style="color:#808080" >
+  <h2>Done</h2>
+    <% @done.each do |a_todo | %>
+  <ul>
+    <li>
+      <div><%= a_todo.content %></div>
+      <small>Completed at <%= a_todo.updated_at.strftime("%l:%M%P on %d-%b-%Y") %> ago
+        <a href="/delete_todo/<%= a_todo.id %>">Delete</a>
+      </small>
+    </li>
+  </ul>
+  <% end %>
+  </div>
+  <%# @list_of_todos.each do |a_todo| %>
+  <%# if a_todo.status == "done" %>
+<%#= a_todo.content %>
